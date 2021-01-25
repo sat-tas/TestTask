@@ -1,0 +1,47 @@
+<div class="container">
+<div style="text-align: center;">
+    <h1>Position List</h1>
+    <input type="button" value="Create" style="align-content: center;" class="btn btn-warning" (click)="addPosition()" />
+</div>
+
+<table class="table table-striped" style="margin-top: 50px;">
+    <thead>
+        <tr>
+            <td>Name</td>
+            <td></td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let position of positions">
+            <ng-template [ngTemplateOutlet]="loadTemplate(position)" 
+                        [ngTemplateOutletContext]="{ $implicit: position}">
+            </ng-template>
+        </tr>
+    </tbody>
+</table>
+<div>{{statusMessage}}</div>
+    
+    
+<ng-template #readOnlyTemplate let-position>
+    <td>{{position.name}}</td>
+    <td>
+        <input type="button" value="Edit" class="btn btn-success" (click)="editPosition(position)" />
+    </td>
+    <td>
+        <input type="button" value="Delete" class="btn btn-danger" (click)="deletePosition(position)" />
+    </td>
+</ng-template>
+   
+<ng-template #editTemplate>
+    <td>
+        <input type="text" [(ngModel)]="editedPosition.name" class="form-control" />
+    </td>
+    <td>
+        <input type="button" value="Save" (click)="savePosition()" class="btn btn-success" />
+    </td>
+    <td>
+        <input type="button" value="Close" (click)="cancel()" class="btn btn-warning" />
+    </td>
+</ng-template>
+</div>

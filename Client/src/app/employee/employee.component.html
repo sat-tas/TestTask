@@ -1,0 +1,92 @@
+<div class="container">
+<div style="text-align: center;">
+    <h1>Employee List</h1>
+    <input type="button" value="Create" style="align-content: center;" class="btn btn-warning" (click)="addEmployee()" />
+</div>
+
+<table class="table table-striped" style="margin-top: 50px;">
+    <thead>
+        <tr>
+            <td>Name</td>
+            <td>Surname</td>
+            <td>Patronymic</td>
+            <td>DepartmentName</td>
+            <td>PositionName</td>
+            <td>DateAdded</td>
+            <td>DateChangeInfo</td>
+            <td>DateOfHiring</td>
+            <td></td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let employee of employees">
+            <ng-template [ngTemplateOutlet]="loadTemplate(employee)" 
+                        [ngTemplateOutletContext]="{ $implicit: employee}">
+            </ng-template>
+        </tr>
+    </tbody>
+</table>
+<div class="container">
+    <div>
+        <ng-template [ngIf]="isError">
+            <ngb-alert type="danger" [dismissible]="false">{{statusMessage}}</ngb-alert>    
+        </ng-template>
+        <ng-template [ngIf]="!isError">
+            <ngb-alert type="success" [dismissible]="false">{{statusMessage}}</ngb-alert>    
+        </ng-template>
+    </div>
+</div>
+    
+    
+<ng-template #readOnlyTemplate let-employee>
+    <td>{{employee.name}}</td>
+    <td>{{employee.surname}}</td>
+    <td>{{employee.patronymic}}</td>
+    <td>{{employee.departmentName}}</td>
+    <td>{{employee.positionName}}</td>
+    <td>{{employee.dateAdded}}</td>
+    <td>{{employee.dateChangeInfo}}</td>
+    <td>{{employee.dateOfHiring}}</td>
+    <td>
+        <input type="button" value="Edit" class="btn btn-success" (click)="editEmployee(employee)" />
+    </td>
+    <td>
+        <input type="button" value="Delete" class="btn btn-danger" (click)="deleteEmployee(employee)" />
+    </td>
+</ng-template>
+   
+<ng-template #editTemplate>
+    <td>
+        <input type="text" [(ngModel)]="editedEmployee.name" class="form-control" />
+    </td>
+    <td>
+        <input type="text" [(ngModel)]="editedEmployee.surname" class="form-control" />
+    </td>
+    <td>
+        <input type="text" [(ngModel)]="editedEmployee.patronymic" class="form-control" />
+    </td>
+    <td>
+        <select  class="custom-select"  (change)="selectDepartmentChangeHandler($event)">
+           <option value="" disabled selected hidden>{{editedEmployee.departmentName}}</option>        
+            <option *ngFor="let department of departments"  value={{department.id}}>{{department.name}}</option>
+         </select>
+    </td>
+    <td>
+        <select  class="custom-select"  (change)="selectPositionChangeHandler($event)">
+            <option value="" disabled selected hidden>{{editedEmployee.positionName}}</option>        
+             <option *ngFor="let position of positions"  value={{position.id}}>{{position.name}}</option>
+          </select>
+ 
+    </td>
+    <td>{{editedEmployee.dateAdded}}</td>
+    <td>{{editedEmployee.dateChangeInfo}}</td>
+    <td>{{editedEmployee.dateOfHiring}}</td>
+    <td>
+        <input type="button" value="Save" (click)="saveEmployee()" class="btn btn-success" />
+    </td>
+    <td>
+        <input type="button" value="Close" (click)="cancel()" class="btn btn-warning" />
+    </td>
+</ng-template>
+</div>

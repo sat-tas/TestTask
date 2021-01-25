@@ -1,0 +1,115 @@
+<div class="container">
+    <div style="text-align: center;">
+        <h1>Department List</h1>
+        <input type="button" value="Create" style="align-content: center;" class="btn btn-warning" (click)="addDepartment()" />
+            <div  class="form-group form-inline"> Full text search: 
+                <input type="text" [(ngModel)]="searchTerm" class="form-control" />
+                <input type="button" value="Search" class="form-control ml-3" (click)="loadDepartments()"/>
+            </div>
+         
+    </div>
+<table class="table table-striped" style="margin-top: 50px;">
+    <thead>
+        <tr>
+            <td>Name</td>
+            <td>Date of creation</td>
+            <td>Date of edit</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let department of departments">
+            <ng-template [ngTemplateOutlet]="loadTemplate(department)" 
+                        [ngTemplateOutletContext]="{ $implicit: department}">
+            </ng-template>
+        </tr>
+    </tbody>
+</table>
+<div class="container">
+    <div>
+        <ng-template [ngIf]="isError">
+            <ngb-alert type="danger" [dismissible]="false">{{statusMessage}}</ngb-alert>    
+        </ng-template>
+        <ng-template [ngIf]="!isError">
+            <ngb-alert type="success" [dismissible]="false">{{statusMessage}}</ngb-alert>    
+        </ng-template>
+    </div>
+    <div>
+        <ngb-pagination class="d-flex justify-content-center" [collectionSize]="pageCount" [pageSize]="pageSize" [(page)]="pageNumber" (pageChange)="loadDepartments(pageNumber)" [directionLinks]="false"></ngb-pagination>
+    </div>
+</div>
+
+<table class="table table-striped" style="margin-top: 50px;">
+    <thead>
+        <tr>
+            <td>Name</td>
+            <td>Surname</td>
+            <td>Patronymic</td>
+            <td>DepartmentName</td>
+            <td>DateAdded</td>
+            <td>DateChangeInfo</td>
+            <td>DateOfHiring</td>
+            <td></td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let employee of employees">
+            <ng-template [ngTemplateOutlet]="loadTemplateEmployee(employee)" 
+                        [ngTemplateOutletContext]="{ $implicit: employee}">
+            </ng-template>
+        </tr>
+    </tbody>
+</table>
+    
+    
+<ng-template #readOnlyTemplateEmployee let-employee>
+    <td>{{employee.name}}</td>
+    <td>{{employee.surname}}</td>
+    <td>{{employee.patronymic}}</td>
+    <td>{{employee.departmentName}}</td>
+    <td>{{employee.dateAdded}}</td>
+    <td>{{employee.dateChangeInfo}}</td>
+    <td>{{employee.dateOfHiring}}</td>
+    <td></td>
+    <td>
+        <input  type="button" value="Remove" class="btn btn-danger" (click)="removeEmployee(employee)" />
+    </td>
+</ng-template>
+
+
+
+
+
+<ng-template #readOnlyTemplate let-department>
+    <td>{{department.name}}</td>
+    <td>{{department.dateAdded}}</td>
+    <td>{{department.dateChangeInfo}}</td>
+    <td>
+        <input type="button" value="Edit" class="btn btn-success" (click)="editDepartment(department)" />
+    </td>
+    <td>
+        <button class="btn btn-outline-primary mr-2" (click)="openEmployees(department.id)">  <div>Employees</div> </button>    
+    </td>
+    <td>
+        <input type="button" value="Delete" class="btn btn-danger" (click)="deleteDepartment(department)" />
+    </td>
+</ng-template>
+   
+<ng-template #editTemplate>
+    <td>
+        <input type="text" [(ngModel)]="editedDepartment.name" class="form-control" />
+    </td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+        <input type="button" value="Save" (click)="saveDepartment()" class="btn btn-success" />
+    </td>
+    <td>
+        <input type="button" value="Close" (click)="cancel()" class="btn btn-warning" />
+    </td>
+</ng-template>
+</div>
